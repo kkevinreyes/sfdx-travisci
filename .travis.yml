@@ -20,8 +20,8 @@ before_install:
 - export PATH=./sfdx/$(pwd):$PATH
 - sfdx --version
 - sfdx plugins --core
-- sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
-  --username $USERNAME --setdefaultdevhubusername -a DevHub
+- sfdx force:auth:jwt:grant --clientid 3MVG9n_HvETGhr3Ca6xYW2EQnKG3kIvPRzrGo7A9_31u1ycLHXCHovT08L4TiEve2S3o18Tp --jwtkeyfile assets/server.key
+  --username krstncreyes2_cpq2@gmail.com --setdefaultdevhubusername -a DevHub
 script:
 - sfdx force:org:create -v HubOrg -s -f config/project-scratch-def.json -a ciorg --wait
   2
