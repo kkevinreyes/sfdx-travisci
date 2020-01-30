@@ -1,13 +1,12 @@
 sudo: true
 os: trusty
 cache: false
-
 env:
-- URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
-
+  matrix:
+  - URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
+  global:
+    secure: EDCib6AWW++bcH79gapgp0yVHaTnitpNvaZ+sVrDz0Zd2FlU8JSYW7SYUO26EdKOt+tTfTc5KuvXlSBuLA40N8UGBpp6u/mOtfXA0STm1rLnUQlChZ0HZu+iqg6lkXicn0vjs46jOuIXkQySujs0gEmQ4yu5vbbaHttJ+K6SrHOw5GGlpLBgqT4uYuF5eHvqkAV1giqs/QiGwvV918RDAv8vKRJJKqBg+nvH0WAMCDaHQe9f3s/gwyhZhpuFbEd0eBykTNL2M0gB96xVX/gWdWbMkOgDE5tdL6AAsrgskqI7IJ1Qbyy+UvzuVEoZknJ4fkKIDN0gyTCsxZ9Gy1QWgiQE7QzCxnS5t2LPpmunLUQzYBafKPE3ICSriRUoU3lMnrR6Ggxejdgx4zC8pFa2yjFOt2/td9f2OQn14xmSY6P07kKzWLZgGQyPbpT63ChF89Vkur0R9fjfGXjr/joXQ1XlHxzOCe0tj1CrU+QQojL0pBLMoPv5sBqA6dyUAdIpXMjhqW1CPIdsdAxqdsAMRy3pizduyXNlJKo1Am7+z86jd5SsTeH+/cwApxq7P46kLbvp0Zi8aR6I1U/8rvT+/dTpp4syweYwd7LV5UJXDS3ZNiauhrlxKqQ0em5s4ojgvaBYNKsycMWjYmJ+ZH5LvANC4nXCnYVKIBLV5fOgu/w=
 before_install:
-- openssl aes-256-cbc -K $encrypted_b1fbf710b918_key -iv $encrypted_b1fbf710b918_iv
-  -in assets/server.key.enc -out assets/server.key -d
 - export SFDX_AUTOUPDATE_DISABLE=false
 - export SFDX_USE_GENERIC_UNIX_KEYCHAIN=true
 - export SFDX_DOMAIN_RETRY=300
@@ -19,10 +18,11 @@ before_install:
 - export PATH=./sfdx/$(pwd):$PATH
 - sfdx --version
 - sfdx plugins --core
-- sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key --username $USERNAME --setdefaultdevhubusername -a HubOrg
-
+- sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
+  --username $USERNAME --setdefaultdevhubusername -a HubOrg
 script:
-- sfdx force:org:create -v HubOrg -s -f config/project-scratch-def.json -a ciorg --wait 2
+- sfdx force:org:create -v HubOrg -s -f config/project-scratch-def.json -a ciorg --wait
+  2
 - sfdx force:org:display -u ciorg
 - sfdx force:source:push -u ciorg
 - sfdx force:apex:test:run -u ciorg --wait 10
